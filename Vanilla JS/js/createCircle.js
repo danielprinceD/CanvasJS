@@ -12,7 +12,7 @@ const randomXY = () => {
     randomY: Math.random() * canvasHeight,
   };
 };
-
+var count = 1;
 class Circle {
   colors = ["red", "yellow", "green", "blue", "orange"];
   choose = Math.random() * this.colors.length;
@@ -23,16 +23,21 @@ class Circle {
   draw() {
     context.beginPath();
     const rand = randomXY();
-    context.fillStyle = this.colors[Math.floor(this.choose)];
+    context.fillStyle = "black";
+    context.textBaseLine = "middle";
+    context.textAlign = "center";
+    context.font = "14px Arial";
+    context.fillText(count++, rand.randomX, rand.randomY);
+    context.strokeStyle = this.colors[Math.floor(this.choose)];
     context.arc(rand.randomX, rand.randomY, this.rad, 0, 2 * Math.PI);
 
-    context.fill();
+    context.stroke();
   }
 }
 const rand = randomXY();
 let cir = [];
 
-for (let i = 1; i <= 100; i++) {
-  newCir = new Circle(20);
+for (let i = 1; i <= 10; i++) {
+  newCir = new Circle(50);
   newCir.draw();
 }
