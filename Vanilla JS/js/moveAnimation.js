@@ -53,23 +53,26 @@ let getDistance = (x1, y1, x2, y2) => {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 };
 
-let cir = new Circle(100, 100, 50, 2, "A");
-cir.draw(context);
-let cir2 = new Circle(300, 110, 100, 3, "B");
-cir2.draw(context);
+let all_circle = [];
+
+var minMax = function (min, max) {
+  return Math.random() * (max - min) + min;
+};
+
+for (let i = 0; i < 10; i++) {
+  let rad = 50;
+  let x = minMax(rad, canvasWidth - rad);
+  let y = minMax(rad, canvasHeight - rad);
+  let cir = new Circle(x, y, rad, 2, String.fromCharCode(65 + i));
+  cir.draw(context);
+  all_circle.push(cir);
+}
 function updater() {
   requestAnimationFrame(updater);
   context.clearRect(0, 0, canvasWidth, canvasHeight);
-  let dist = getDistance(cir.posX, cir.posY, cir2.posX, cir2.posY);
-
-  if (dist <= cir2.rad + cir.rad) {
-    cir.dx = -cir.dx;
-    cir.dy = -cir.dy;
-    cir2.dx = -cir2.dx;
-    cir2.dy = -cir2.dy;
-  }
-  cir.update();
-  cir2.update();
+  all_circle.forEach((e) => {
+    e.update();
+  });
 }
 
 updater();
