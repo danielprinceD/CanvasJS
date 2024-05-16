@@ -9,9 +9,8 @@ const randomXY = () => {
     randomY: Math.random() * canvasHeight,
   };
 };
-var count = 0;
 class Circle {
-  constructor(posx, posy, rad, speed) {
+  constructor(posx, posy, rad, speed, text) {
     this.rad = rad;
     this.rand = randomXY();
     this.speedX = speed;
@@ -20,7 +19,7 @@ class Circle {
     this.posY = posy;
     this.dx = speed;
     this.dy = speed;
-    console.log(this.dx);
+    this.text = text;
   }
 
   draw(context) {
@@ -30,22 +29,19 @@ class Circle {
     context.textAlign = "center";
     context.font = "14px Arial";
     context.strokeStyle = "red";
-    context.fillText(count, this.posX, this.posY);
+    context.fillText(this.text, this.posX, this.posY);
     context.arc(this.posX, this.posY, this.rad, 0, 2 * Math.PI);
 
     context.stroke();
   }
   update() {
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
     this.draw(context);
     if (canvasHeight < this.posY + this.rad || 0 >= this.posY - this.rad) {
       this.dy = -this.dy;
-      count++;
     }
 
     if (canvasWidth < this.posX + this.rad || 0 >= this.posX - this.rad) {
       this.dx = -this.dx;
-      count++;
     }
 
     this.posX += this.dx;
@@ -53,11 +49,27 @@ class Circle {
   }
 }
 
-let cir = new Circle(100, 100, 50, 2);
+let getDistance = (x1, y1, x2, y2) => {
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+};
+
+let cir = new Circle(100, 100, 50, 2, "A");
 cir.draw(context);
+let cir2 = new Circle(300, 110, 100, 3, "B");
+cir2.draw(context);
 function updater() {
   requestAnimationFrame(updater);
+  context.clearRect(0, 0, canvasWidth, canvasHeight);
+  let dist = getDistance(cir.posX, cir.posY, cir2.posX, cir2.posY);
+
+  if (dist <= cir2.rad + cir.rad) {
+    cir.dx = -cir.dx;
+    cir.dy = -cir.dy;
+    cir2.dx = -cir2.dx;
+    cir2.dy = -cir2.dy;
+  }
   cir.update();
+  cir2.update();
 }
 
 updater();
