@@ -26,7 +26,7 @@ class Circle {
     this.draw(context);
   }
   isClicked(x, y) {
-    const dist = Math.sqrt(Math.pow(x - this.x, 2), Math.pow(y - this.y, 2));
+    const dist = Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
     if (dist <= this.rad) return true;
     return false;
   }
@@ -37,8 +37,8 @@ cir.draw(context);
 
 canvas.addEventListener("mousemove", (e) => {
   let canvasPos = canvas.getBoundingClientRect();
-  let x = e.clientX - canvasPos.x;
-  let y = e.clientY - canvasPos.y;
+  let x = e.clientX - canvasPos.left;
+  let y = e.clientY - canvasPos.top;
   if (cir.isClicked(x, y)) cir.changeColor("blue");
   else cir.changeColor("red");
 });
